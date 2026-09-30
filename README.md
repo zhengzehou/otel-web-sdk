@@ -16,7 +16,7 @@ SDK 在浏览器端创建自动 Span 时，会在名称末尾追加当前页面�
 
 fetch 和 XMLHttpRequest 的名称本来就是 HTTP 方法加 URL path，例如 GET /api/orders；它们继续保留接口 path。页面 Host 不会出现在名称中。
 
-默认不带查询参数。需要把查询参数也纳入名称时，可以配置：
+默认不带查询参数。如需把查询参数纳入名称，可以配置：
 
     HTML: data-include-url-query="true"
     JavaScript: includeUrlQuery: true
