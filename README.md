@@ -201,7 +201,7 @@ baggage
 - `fetch` 和 `XMLHttpRequest`
 - 按钮、链接和 `[role="button"]` 点击
 - JavaScript Error 和未处理的 Promise rejection
-- `console.warn`、`console.error`（受最低日志级别过滤；默认仅采集 ERROR）
+- `console.debug`、`console.info`、`console.log`、`console.warn`、`console.error`（受最低日志级别过滤；默认仅采集 ERROR）
 - CLS、FCP、INP、LCP、TTFB Web Vitals
 
 ## Web Vitals 指标说明
@@ -285,10 +285,10 @@ LCP、INP、CLS 等指标可能要到页面进入后台或页面生命周期接�
 | `WARN` | WARN、ERROR |
 | `ERROR` | ERROR；默认值 |
 
-例如需要采集 `console.warn()`：
+例如需要采集 `console.info()` 和 `console.log()`：
 
 ```html
-<script src="/sdk/otel-web.min.js?v=0.3.3" data-min-log-level="WARN"></script>
+<script src="/sdk/otel-web.min.js?v=0.3.3" data-min-log-level="INFO"></script>
 ```
 
 JavaScript 初始化方式：
@@ -389,7 +389,7 @@ await DatabuffOtel.flush()
 - 页面加载或路由期间的日志关联 `page.load` / `page.view`。
 - 按钮点击关联窗口内的日志关联对应的 `ui.click`。
 - JavaScript 异常日志关联 `browser.error`。
-- 当日志级别达到配置阈值且没有活动业务 Span 时，`DatabuffOtel.log()`、`console.warn()` 或 `console.error()` 会创建对应的 `log.*` 短 Span。默认阈值为 `ERROR`，因此 `console.warn()` 默认不会上报。
+- 当日志级别达到配置阈值且没有活动业务 Span 时，`DatabuffOtel.log()` 以及 `console.debug()`、`console.info()`、`console.log()`、`console.warn()`、`console.error()` 会创建对应的 `log.*` 短 Span。默认阈值为 `ERROR`，因此这些非 ERROR 控制台日志默认不会上报。
 
 日志表中应能看到：
 

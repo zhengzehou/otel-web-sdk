@@ -598,10 +598,13 @@ function installGlobalHooks(config: ResolvedConfig): () => void {
   }
 
   if (config.captureConsole) {
+    const originalDebug = console.debug
+    const originalInfo = console.info
+    const originalLog = console.log
     const originalWarn = console.warn
     const originalError = console.error
     let emittingConsoleLog = false
-    const capture = (severity: 'WARN' | 'ERROR', original: typeof console.warn, args: unknown[]) => {
+    const capture = (severity: DatabuffOtelLogLevel, original: typeof console.warn, args: unknown[]) => {
       original.apply(console, args)
       if (emittingConsoleLog) return
       emittingConsoleLog = true
@@ -614,9 +617,15 @@ function installGlobalHooks(config: ResolvedConfig): () => void {
         emittingConsoleLog = false
       }
     }
+    console.debug = (...args: unknown[]) => capture('DEBUG', originalDebug, args)
+    console.info = (...args: unknown[]) => capture('INFO', originalInfo, args)
+    console.log = (...args: unknown[]) => capture('INFO', originalLog, args)
     console.warn = (...args: unknown[]) => capture('WARN', originalWarn, args)
     console.error = (...args: unknown[]) => capture('ERROR', originalError, args)
     removers.push(() => {
+      console.debug = originalDebug
+      console.info = originalInfo
+      console.log = originalLog
       console.warn = originalWarn
       console.error = originalError
     })
